@@ -1,0 +1,125 @@
+using System;
+
+class Queen
+{
+    public int QueenRow { get; set; }
+    public int QueenColumn { get; set; }
+
+    public Queen()
+    {
+        Console.WriteLine();
+    }
+
+    public void PlaceQueenRandomly(int[,] chessBoard)
+    {
+        Random random = new Random();
+        QueenRow = random.Next(0, 7);
+        QueenColumn = random.Next(0, 7);
+
+        if (chessBoard[QueenRow, QueenColumn] == 0)
+        {
+            QueenStrokes(chessBoard, QueenRow, QueenColumn);
+        }
+    }
+
+    public void PlaceQueensOnEmptyCells(int[,] chessBoard, int rows, int columns)
+    {
+        for (int i = 0; i < rows; i++)
+        {
+            for (int j = 0; j < columns; j++)
+            {
+                if (chessBoard[i, j] == 0)
+                {
+                    QueenRow = i;
+                    QueenColumn = j;
+                    QueenStrokes(chessBoard, QueenRow, QueenColumn);
+                }
+            }
+        }
+    }
+
+    public void QueenStrokes(int[,] chessBoard, int queenRow, int queenColumn)
+    {
+        MarkHorizontalAndVerticalStrokes(chessBoard, queenRow, queenColumn);
+        MarkDiagonalStrokes(chessBoard, queenRow, queenColumn);
+        chessBoard[queenRow, queenColumn] = 9; // Marking the queen's position
+    }
+
+    private void MarkHorizontalAndVerticalStrokes(int[,] chessBoard, int queenRow, int queenColumn)
+    {
+        for (int i = 0; i < 8; i++)
+        {
+            chessBoard[queenRow, i] = 1;
+            chessBoard[i, queenColumn] = 1;
+        }
+    }
+
+    private void MarkDiagonalStrokes(int[,] chessBoard, int queenRow, int queenColumn)
+    {
+        for (int i = 0; i < 8; i++)
+        {
+            MarkDiagonal(chessBoard, queenRow + i, queenColumn + i);
+            MarkDiagonal(chessBoard, queenRow - i, queenColumn - i);
+            MarkDiagonal(chessBoard, queenRow + i, queenColumn - i);
+            MarkDiagonal(chessBoard, queenRow - i, queenColumn + i);
+        }
+    }
+
+    private void MarkDiagonal(int[,] chessBoard, int row, int col)
+    {
+        if (IsValidPosition(row, col))
+        {
+            chessBoard[row, col] = 1;
+        }
+    }
+
+    private bool IsValidPosition(int row, int col)
+    {
+        return row >= 0 && row < 8 && col >= 0 && col < 8;
+    }
+
+    public void Visualize(int rows, int columns, int[,] chessBoard)
+    {
+        for (int i = 0; i < rows; i++)
+        {
+            for (int j = 0; j < columns; j++)
+            {
+                Console.Write(chessBoard[i, j] + " ");
+            }
+            Console.WriteLine();
+        }
+        Console.WriteLine();
+        Console.WriteLine();
+        Console.WriteLine();
+    }
+}
+
+class Program
+{
+    static void Main()
+    {
+        int rows = 8;
+        int columns = 8;
+        int[,] chessBoard = new int[rows, columns];
+
+        Queen queen1 = new Queen();
+        Queen queen2 = new Queen();
+
+        for (int i = 0; i < rows; i++)
+        {
+            for (int j = 0; j < columns; j++)
+            {
+                chessBoard[i, j] = 0;
+            }
+        }
+
+        for (int i = 0; i < 30; i++)
+        {
+            queen1.PlaceQueenRandomly(chessBoard);
+        }
+
+        queen2.PlaceQueensOnEmptyCells(chessBoard, rows, columns);
+
+        queen1.Visualize(rows, columns, chessBoard);
+    }
+}
