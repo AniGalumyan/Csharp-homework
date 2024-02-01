@@ -1,0 +1,106 @@
+using System;
+
+class Knight
+{
+    public int KnightRow { get; set; }
+    public int KnightColumn { get; set; }
+
+    public Knight()
+    {
+    }
+
+    public void KnightStrokes(int[,] chessBoard, int knightRow, int knightColumn, int[] rand, int num)
+    {
+        for (int i = 1; i < 3; i++)
+        {
+            int j = 3 - i;
+            MarkAndStoreMove(chessBoard, knightRow + i, knightColumn + j, rand, num);
+            MarkAndStoreMove(chessBoard, knightRow + i, knightColumn - j, rand, num);
+            MarkAndStoreMove(chessBoard, knightRow - i, knightColumn - j, rand, num);
+            MarkAndStoreMove(chessBoard, knightRow - i, knightColumn + j, rand, num);
+        }
+        chessBoard[knightRow, knightColumn] = 9;
+    }
+
+    private void MarkAndStoreMove(int[,] chessBoard, int row, int col, int[] rand, int num)
+    {
+        if (IsValidPosition(row, col))
+        {
+            chessBoard[row, col] = 1;
+            StoreMove(rand, num, row, col);
+        }
+    }
+
+    private void StoreMove(int[] rand, int num, int row, int col)
+    {
+        rand[num] = row;
+        rand[num + 1] = col;
+        num += 2;
+    }
+
+    public void KnightStrokesCleaner(int[,] chessBoard, int knightRow, int knightColumn)
+    {
+        for (int i = 1; i < 3; i++)
+        {
+            int j = 3 - i;
+            ClearMove(chessBoard, knightRow + i, knightColumn + j);
+            ClearMove(chessBoard, knightRow + i, knightColumn - j);
+            ClearMove(chessBoard, knightRow - i, knightColumn - j);
+            ClearMove(chessBoard, knightRow - i, knightColumn + j);
+        }
+    }
+
+    private void ClearMove(int[,] chessBoard, int row, int col)
+    {
+        if (IsValidPosition(row, col))
+        {
+            chessBoard[row, col] = 0;
+        }
+    }
+
+    public void Visual(int rows, int columns, int[,] chessBoard)
+    {
+        for (int i = 0; i < rows; i++)
+        {
+            for (int j = 0; j < columns; j++)
+            {
+                Console.Write(chessBoard[i, j] + " ");
+            }
+            Console.WriteLine();
+        }
+        Console.WriteLine();
+        Console.WriteLine();
+        Console.WriteLine();
+    }
+
+    private bool IsValidPosition(int row, int col)
+    {
+        return row >= 0 && row < 8 && col >= 0 && col < 8;
+    }
+}
+
+class Program
+{
+    static void Main()
+    {
+        int rows = 8;
+        int columns = 8;
+        int[,] chessBoard = new int[rows, columns];
+
+        Knight knight1 = new Knight();
+        knight1.KnightRow = 5;
+        knight1.KnightColumn = 6;
+        knight1.KnightStrokes(chessBoard, knight1.KnightRow, knight1.KnightColumn, new int[15], 0);
+        knight1.Visual(rows, columns, chessBoard);
+
+        Random random = new Random();
+        int m = random.Next(0, 15);
+
+        Knight knight2 = new Knight();
+        knight2.KnightRow = m % 2 == 0 ? new int[15][m] : new int[15][m - 1];
+        knight2.KnightColumn = m % 2 == 0 ? new int[15][m + 1] : new int[15][m];
+        knight2.KnightStrokesCleaner(chessBoard, knight1.KnightRow, knight1.KnightColumn);
+        knight2.KnightStrokes(chessBoard, knight2.KnightRow, knight2.KnightColumn, new int[15], 0);
+        knight2.Visual(rows, columns, chessBoard);
+    }
+}
