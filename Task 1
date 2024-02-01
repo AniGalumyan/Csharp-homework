@@ -1,0 +1,85 @@
+using System;
+
+class Program
+{
+    static void Main()
+    {
+        int rows = 8;
+        int columns = 8;
+
+        int[,] chessBoard = CreateEmptyChessBoard(rows, columns);
+
+        // Place the knight in a random location.
+        Random random = new Random();
+
+        int knightRow = random.Next(0, rows);
+        int knightColumn = random.Next(0, columns);
+
+        PlaceKnight(chessBoard, knightRow, knightColumn);
+
+        // Mark the knight's possible moves on the chess board.
+        MarkKnightStrokes(chessBoard, knightRow, knightColumn);
+
+        // Visualize the chess board in the console.
+        DisplayChessBoard(chessBoard);
+
+        Console.ReadLine();
+    }
+
+    static int[,] CreateEmptyChessBoard(int rows, int columns)
+    {
+        int[,] chessBoard = new int[rows, columns];
+
+        for (int i = 0; i < rows; i++)
+        {
+            for (int j = 0; j < columns; j++)
+            {
+                chessBoard[i, j] = 0;
+            }
+        }
+
+        return chessBoard;
+    }
+
+    static void PlaceKnight(int[,] chessBoard, int row, int column)
+    {
+        chessBoard[row, column] = 9;
+    }
+
+    static void MarkKnightStrokes(int[,] chessBoard, int knightRow, int knightColumn)
+    {
+        for (int i = 1; i < 3; i++)
+        {
+            int j = 3 - i;
+            MarkStrokes(chessBoard, knightRow + i, knightColumn + j);
+            MarkStrokes(chessBoard, knightRow + i, knightColumn - j);
+            MarkStrokes(chessBoard, knightRow - i, knightColumn - j);
+            MarkStrokes(chessBoard, knightRow - i, knightColumn + j);
+        }
+    }
+
+    static void MarkStrokes(int[,] chessBoard, int row, int column)
+    {
+        if (IsValidMove(row, column, chessBoard.GetLength(0), chessBoard.GetLength(1)))
+        {
+            chessBoard[row, column] = 1;
+        }
+    }
+
+    static bool IsValidMove(int row, int column, int numRows, int numColumns)
+    {
+        return row >= 0 && row < numRows && column >= 0 && column < numColumns;
+    }
+
+    static void DisplayChessBoard(int[,] chessBoard)
+    {
+        for (int i = 0; i < chessBoard.GetLength(0); i++)
+        {
+            for (int j = 0; j < chessBoard.GetLength(1); j++)
+            {
+                Console.Write(chessBoard[i, j] + " ");
+            }
+            Console.WriteLine();
+        }
+    }
+}
