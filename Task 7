@@ -212,3 +212,85 @@ namespace KnightTour
         }
     }
 }
+Task 9
+1. public static void SolveQuadratic(double a, double b, double c, ref double x1, ref double x2)
+{
+    double D= b * b - 4 * a * c;
+    if (D < 0)
+    {
+       ("No roots");
+    }
+    else if (D == 0)
+    {
+        x1 = x2 = -b / (2 * a);
+    }
+    else
+    {
+        x1 = (-b + Math.Sqrt(D)) / (2 * a);
+        x2 = (-b - Math.Sqrt(D)) / (2 * a);
+    }
+} With  ref parameters
+2.public static (double x1, double x2) SolveQuadratic(double a, double b, double c)
+{
+    double D = b * b - 4 * a * c;
+    if (D < 0)
+    {
+       ("No  roots");
+    }
+    else if (D == 0)
+    {
+        return (-b / (2 * a), -b / (2 * a));
+    }
+    else
+    {
+        return ((-b + Math.Sqrt(D)) / (2 * a), (-b - Math.Sqrt(D)) / (2 * a));
+    }
+}
+with tuple
+3.public class QuadraticEquationSolver
+{
+    private double a, b, c;
+
+    public QuadraticEquationSolver(double a, double b, double c)
+    {
+        this.a = a;
+        this.b = b;
+        this.c = c;
+    }
+
+    public void Solve(out double x1, out double x2)
+    {
+        double D = b * b - 4 * a * c;
+        if (D < 0)
+        {
+            ("No roots");
+        }
+        else if (D == 0)
+        {
+            x1 = x2 = -b / (2 * a);
+        }
+        else
+        {
+            x1 = (-b + Math.Sqrt(D)) / (2 * a);
+            x2 = (-b - Math.Sqrt(D)) / (2 * a);
+        }
+    }
+}
+With Deconstructing in class
+4.public static double[] SolveQuadratic(double a, double b, double c)
+{
+    double D = b * b - 4 * a * c;
+    if (D < 0)
+    {
+        ("No roots");
+    }
+    else if (D == 0)
+    {
+        return new double[] { -b / (2 * a) };
+    }
+    else
+    {
+        return new double[] { (-b + Math.Sqrt(D)) / (2 * a), (-b - Math.Sqrt(D)) / (2 * a) };
+    }
+}
+With Array
