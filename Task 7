@@ -1,0 +1,130 @@
+using System;
+
+namespace QueenPlacement
+{
+    class Program
+    {
+        static int[,] chessboard = new int[8, 8]; // 8x8 chessboard
+
+        static void Main(string[] args)
+        {
+            int row = 7;
+            int col = 7;
+            int flag = 0;
+
+            Console.ForegroundColor = ConsoleColor.White;
+
+            while (flag == 0)
+            {
+                AddQueen(row, col);
+                VisualizeChessboard();
+
+                int c = CountConflicts(row, col);
+
+                if (c != 0)
+                {
+                    row = -1;
+                    col = -1;
+                    int minConflicts = 100;
+
+                    for (int i = 0; i < 8; i++)
+                    {
+                        for (int j = 0; j < 8; j++)
+                        {
+                            if (chessboard[i, j] != 1 && chessboard[i, j] != 9)
+                            {
+                                int currentConflicts = CountConflicts(i, j);
+                                if (currentConflicts <= minConflicts)
+                                {
+                                    minConflicts = currentConflicts;
+                                    row = i;
+                                    col = j;
+                                }
+                            }
+                        }
+                    }
+                }
+                else
+                {
+                    Console.WriteLine("No valid position for placing the queen.");
+                    flag = 1;
+                    break;
+                }
+            }
+        }
+
+        static void VisualizeChessboard()
+        {
+            for (int i = 0; i < 8; i++)
+            {
+                for (int j = 0; j < 8; j++)
+                {
+                    if (chessboard[i, j] == 9)
+                    {
+                        Console.ForegroundColor = ConsoleColor.Green;
+                        Console.Write("Q ");
+                        Console.ForegroundColor = ConsoleColor.White;
+                    }
+                    else if (chessboard[i, j] == 1)
+                    {
+                        Console.Write("1 ");
+                    }
+                    else
+                    {
+                        Console.Write("0 ");
+                    }
+                }
+                Console.WriteLine();
+            }
+            Console.WriteLine();
+            Console.WriteLine();
+            Console.WriteLine();
+            Console.WriteLine();
+            Console.WriteLine();
+        }
+
+        static void AddQueen(int row, int col)
+        {
+            for (int i = 0; i < 8; i++)
+            {
+                for (int j = 0; j < 8; j++)
+                {
+                    if (row == i && col == j)
+                    {
+                        chessboard[i, j] = 9;
+                    }
+                    else if (chessboard[i, j] == 1 || chessboard[i, j] == 9)
+                    {
+                        continue;
+                    }
+                    else if ((Math.Abs(row - i) == Math.Abs(col - j)) || row == i || col == j)
+                    {
+                        chessboard[i, j] = 1;
+                    }
+                }
+            }
+        }
+
+        static int CountConflicts(int row, int col)
+        {
+            int conflicts = 0;
+            for (int i = 0; i < 8; i++)
+            {
+                for (int j = 0; j < 8; j++)
+                {
+                    if (row == i && col == j)
+                    {
+                        continue;
+                    }
+                    else if ((Math.Abs(row - i) == Math.Abs(col - j)) || row == i || col == j)
+                    {
+                        if (chessboard[i, j] == 0)
+                        {
+                            conflicts++;
+                        }
+                    }
+                }
+            }
+            return conflicts;
+        }
+    }
